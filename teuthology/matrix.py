@@ -214,7 +214,7 @@ def generate_paths(path, result, joinf=os.path.join):
     """
     Generates from the result set a list of sorted paths to concatenate
     """
-    return sorted([reduce(joinf, i, path) for i in generate_lists(result)])
+    return [reduce(joinf, i, path) for i in sorted(generate_lists(result))]
 
 def generate_desc(joinf, result):
     """
@@ -222,10 +222,10 @@ def generate_desc(joinf, result):
     """
     if type(result) is frozenset:
         ret = []
-        for i in result:
+        for i in sorted(result):
             ret.append(generate_desc(joinf, i))
         if len(ret) > 1:
-            return '{' + ' '.join(sorted(ret)) + '}'
+            return '{' + ' '.join(ret) + '}'
         else:
             return ret[0]
     elif type(result) is tuple:
