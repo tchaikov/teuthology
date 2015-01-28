@@ -103,6 +103,9 @@ def run_tasks(tasks, ctx):
             from .task import interactive
             log.warning('Saw failure during task execution, going into interactive mode...')
             interactive.task(ctx=ctx, config=None)
+        elif ctx.config.get('hang-on-error'):
+            while True:
+                time.sleep(300)
         # Throughout teuthology, (x,) = y has been used to assign values
         # from yaml files where only one entry of type y is correct.  This
         # causes failures with 'too many values to unpack.'  We want to
@@ -140,6 +143,9 @@ def run_tasks(tasks, ctx):
                         log.warning(
                             'Saw failure during task cleanup, going into interactive mode...')
                         interactive.task(ctx=ctx, config=None)
+                    elif ctx.config.get('hang-on-error'):
+                        while True:
+                         time.sleep(300)
                 else:
                     if suppress:
                         sys.exc_clear()
