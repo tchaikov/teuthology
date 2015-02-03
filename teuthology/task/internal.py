@@ -393,6 +393,35 @@ def archive(ctx, config):
                 path = os.path.join(logdir, rem.shortname)
                 misc.pull_directory(rem, archive_dir, path)
 
+                #Check for Coredumps:
+                coredump_path = os.path.join(path, 'coredump')
+                if os.path.isdir(coredump_path):
+                    log.info('Transferring binaries for coredumps...')
+                    for dump in os.listdir(coredump_path):
+                        # Pull program from core file
+                        dump_path = os.path.join(coredump_path, dump)
+                        dump_info = subprocess.Popen(['file', dump_path], stdout=subprocess.PIPE)
+                        dump_out = dump_info.communicate()
+                        dump_program = dump_out.split("from '")[1].split(' ')[0]
+
+                        # Find path on remote server:
+                        r = rem.run(args=['which', dump_program], stdout=StringIO())
+                        remote_path = r.stdout.getvalue()
+
+                        # Pull remote program into coredump folder:
+                        rem._sftp_get_file(remote_path, os.path.join(coredump_path, dump_program))
+
+                        # Pull Debug symbols:
+                        # RPM distro's append their non-stripped ELF's with .debug
+                        # When deb based distro's do not.
+                        debug_program = '{dump_program}.debug'.format(dump_program=dump_program)
+                        debug_path = os.path.join('/usr/lib/debug', remote_path)
+
+                        if rem.system_type == 'rpm':
+                            debug_path = '{debug_path}.debug'.format(debug_path=debug_path)
+
+                        rem._sftp_get_file(debug_path, os.path.join(coredump_path, debug_program))
+
         log.info('Removing archive directory...')
         run.wait(
             ctx.cluster.run(
