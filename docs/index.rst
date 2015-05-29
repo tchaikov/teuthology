@@ -43,7 +43,7 @@ Provided Utilities
 
 Installation
 ============
-See, [Installation and setup](docs/INSTALL.rst)
+See, [Installation](INSTALL.rst)
 
 
 Infrastructure
