@@ -8,7 +8,7 @@ fi
 case "$1" in
     ovh)
         image='Ubuntu 14.04'
-        flavor='vps-ssd-1'
+        flavor='vps-ssd-3'
         ;;
     entercloudsuite)
         image='GNU/Linux Ubuntu Server 14.04 LTS Trusty Tahr x64'
