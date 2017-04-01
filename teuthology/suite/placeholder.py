@@ -88,10 +88,10 @@ dict_templ = {
                 'sha1': Placeholder('ceph_hash'),
             }
         },
-        'workunit': {
-            'branch': Placeholder('suite_branch'),
-            'sha1': Placeholder('suite_hash'),
-        }
+    },
+    'workunit': {
+        'branch': Placeholder('suite_branch'),
+        'sha1': Placeholder('suite_hash'),
     },
     'repo': Placeholder('ceph_repo'),
     'suite': Placeholder('suite'),
